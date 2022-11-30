@@ -1,13 +1,14 @@
 from game import location
 from game import config
 from game.display import announce
+from game import ship
+from game.events import sickness
 from game.events import *
 from game.items import Cutlass
 from game.items import Flintlock
 from game import event
 import random
 import game.config as config
-from game.events import Death
 
 
 class Island (location.Location):
@@ -21,8 +22,10 @@ class Island (location.Location):
         self.locations = {}
         self.locations["beach"] = self.starting_location
         self.locations["trees"] = Trees(self)
-        self.locations["oasis"] = Oasis(self)
-
+        self.locations["oasis"] = self.starting_location
+        self.locations["Seamps"] = self.starting_location
+        self.locations["Wondering Woods"] =self.starting_location
+        
     def enter (self, ship):
         print ("arrived at an island")
 
@@ -101,30 +104,39 @@ class Oasis (location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
-
+        self.verbs['keep'] = self
+            
         elf.event_chance = 50
 
     def enter (self):
         announce ("coconuts and fruit trees")
         
     def process_verb (self, verb, cmd_list, nouns):
-         if verb == "take":
-             #take food
-             #take coconuts
-             #take fruit
-             #take all
-        elif len(cmd_list) > 1:ß
+        if(verb == "take"):
+            food = input("You have found food! Do you want to keep it")
+            
+            if food == "keep":
+                config.the_player.ship.add_food (20)
+                
+        #elif len(cmd_list) > 1:
+
+        
             
 class Swamp (location.SubLocation):
     def __init__ (self, m):
         super().__init__(m)
         self.name = "Swamps"
-        self.verbs['north'] = self
-        self.verbs['south'] = self
-        self.verbs['east'] = self
-        self.verbs['west'] = self
-
-        self.event_chance = 50
-        self.events.append(Death())
-        self.events.append(drowned_pirates.DrownedPirates())
+        self.verbs['explore'] = self
+        self.verbs['leave'] = self
+        self.ship = None
+        self.symbol = "^"
         
+    def process_verb (self, verb, cmd_list, nouns):
+        if (verb == "explore"):
+            config.the_player.gameInProgress = False
+            config.the_player.kill_all_pirates("Drowned in the Swamp")
+            print ("The pirates drowned in the Swamp")
+
+        elif (verb == "leave"):
+            sickness.Sickness().process(config.the_player.world)
+           
