@@ -35,7 +35,7 @@ class World (Context):
         self.locs[self.homex][self.homey] = homeport.HomePort (self.homex, self.homey, self)
 
         #Add new islands to this list:
-        island_list = [island.Island]
+        island_list = [island.Island, islansEliza.Island]
         for cur_island in island_list:
             placed = False
             while placed == False:
@@ -57,8 +57,8 @@ class World (Context):
         self.events = []
         self.events.append (lucky.LuckyDay())
         self.events.append (nothing.Nothing())
-        self.events.append (seagull.Seagull())
-        self.events.append (seagull.Seagull())
+#        self.events.append (seagull.Seagull())
+ #       self.events.append (seagull.Seagull())
         self.events.append (seagull.Seagull())
         self.events.append (sickness.Sickness())
         self.events.append (drowned_pirates.DrownedPirates())
