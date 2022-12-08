@@ -21,7 +21,7 @@ class Island (location.Location):
         self.starting_location = Beach_with_ship(self)
         self.locations = {}
         self.locations["beach"] = self.starting_location
-        self.locations["oasis"] = Oasis(self)
+        self.locations["Oasis"] = Oasis(self)
         self.locations["Swamps"] = Swamp(self)
         self.locations["Wondering Woods"] = WonderingWoods(self)
         
@@ -83,20 +83,20 @@ class WonderingWoods (location.SubLocation):
 
     def process_verb (self, verb, cmd_list, nouns):
         
-            if self.explored == False
-               if (verb == "explore"): 
-                    if (random.randint(1,2)== 1): #lost
-                        announce ("you are lost in the woods")
-                        for c in config.the_player.get_pirates():
-                            config.the_player.ship.take_food (c.get_hunger())
-                        #if (self.ship.get_food()<0):
-                            #self.gameInProgress = False
-                            #announce (" everyone starved!!!!!!!!!!")
-                            #config.the_player.kill_all_pirates("died of sudden-onset starvation")
-            if:
-                print ("you have found you way through the woods")
-            self.go = True
-        if 
+        if self.explored == False:
+            if (verb == "explore"): 
+                if (random.randint(1,2)== 1): #lost
+                    announce ("you are lost in the woods")
+                    for c in config.the_player.get_pirates():
+                        config.the_player.ship.take_food (c.get_hunger())
+                        if (config.the_player.ship.get_food()<0):
+                            config.the_playe.gameInProgress = False
+                            announce (" everyone starved!!!!!!!!!!")
+                            config.the_player.kill_all_pirates("died of sudden-onset starvation")
+                else:
+                    announce ("you have found you way through the woods")
+                self.go = True
+        
         if (verb == "south"):
             announce ("You return to your beach.")
             config.the_player.next_loc = config.the_player.beach
@@ -128,13 +128,14 @@ class Oasis (location.SubLocation):
         self.event_chance = 50
 
     def enter (self):
-        announce ("coconuts and fruit trees")
+        announce ("get food from Oasis, coconuts and fruit trees")
         
     def process_verb (self, verb, cmd_list, nouns):
         if(verb == "take"):
             food = input("You have found food! Do you want to keep it")
             
             if food == "keep":
+                announce ("food has been added to the ship")
                 config.the_player.ship.add_food (20)
                 
         #elif len(cmd_list) > 1:

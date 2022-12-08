@@ -59,9 +59,9 @@ class World (Context):
         self.events.append (nothing.Nothing())
 #        self.events.append (seagull.Seagull())
  #       self.events.append (seagull.Seagull())
-        self.events.append (seagull.Seagull())
+#        self.events.append (seagull.Seagull())
         self.events.append (sickness.Sickness())
-        self.events.append (drowned_pirates.DrownedPirates())
+#        self.events.append (drowned_pirates.DrownedPirates())
         self.nouns["world"] = self
 
     def get_day (self):
