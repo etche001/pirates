@@ -22,7 +22,7 @@ class Island (location.Location):
         self.locations = {}
         self.locations["beach"] = self.starting_location
         self.locations["Oasis"] = Oasis(self)
-        self.locations["Swamps"] = Swamp(self)
+        self.locations["Swamp"] = Swamp(self)
         self.locations["Wondering Woods"] = WonderingWoods(self)
         
     def enter (self, ship):
@@ -75,8 +75,8 @@ class WonderingWoods (location.SubLocation):
         self.explored = False
 
         self.event_chance = 50
-        self.events.append(man_eating_monkeys.ManEatingMonkeys())
-        self.events.append(drowned_pirates.DrownedPirates())
+        #self.events.append(man_eating_monkeys.ManEatingMonkeys())
+        #self.events.append(drowned_pirates.DrownedPirates())
 
     def enter (self):
         pass
@@ -145,12 +145,21 @@ class Oasis (location.SubLocation):
 class Swamp (location.SubLocation):
     def __init__ (self, m):
         super().__init__(m)
-        self.name = "Swamps"
+        self.name = "Swamp"
+        self.verbs['north'] = self
+        self.verbs['south'] = self
+        self.verbs['east'] = self
+        self.verbs['west'] = self
         self.verbs['explore'] = self
         self.verbs['leave'] = self
         self.ship = None
         self.symbol = "^"
-        
+
+        self.event_chance = 50
+
+    def enter (self):
+        announce ("You have arrived at the Swamps you can explore or leave")
+
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "explore"):
             config.the_player.gameInProgress = False
