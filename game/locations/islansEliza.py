@@ -70,50 +70,59 @@ class WonderingWoods (location.SubLocation):
         self.verbs['south'] = self
         self.verbs['east'] = self
         self.verbs['west'] = self
-        self.verbs['run'] = self
+        self.verbs['back'] = self
         self.verbs['explore'] = self
-        self.explored = False
+        self.explored = False #if the woods are exlpred (start off not exlpored) 
 
         self.event_chance = 50
         #self.events.append(man_eating_monkeys.ManEatingMonkeys())
         #self.events.append(drowned_pirates.DrownedPirates())
 
     def enter (self):
-        pass
+        announce ("You have arived at the Wondering Woods, go back you can explore")
+
 
     def process_verb (self, verb, cmd_list, nouns):
         
         if self.explored == False:
+            if (verb == "back"):
+                print ("hello")
+                ''' moved to a random location in the area '''
+                config.the_player.next_loc = self.main_location.locations["beach"]
+                config.the_player.go = True
+                
             if (verb == "explore"): 
                 if (random.randint(1,2)== 1): #lost
                     announce ("you are lost in the woods")
                     for c in config.the_player.get_pirates():
                         config.the_player.ship.take_food (c.get_hunger())
                         if (config.the_player.ship.get_food()<0):
-                            config.the_playe.gameInProgress = False
+                            config.the_player.gameInProgress = False
                             announce (" everyone starved!!!!!!!!!!")
                             config.the_player.kill_all_pirates("died of sudden-onset starvation")
-                else:
+                else: 
                     announce ("you have found you way through the woods")
-                self.go = True
-        
-        if (verb == "south"):
-            announce ("You return to your beach.")
-            config.the_player.next_loc = config.the_player.beach
-            config.the_player.visiting = False
-        elif (verb == "north"):
-            announce ("Ocean north")
-            config.the_player.next_loc = self.main_location.locations["Wondering Woods"]
-        elif (verb == "east"):
-            announce ("You have enterd at the Oasis")
-            config.the_player.next_loc = self.main_location.locations["Oasis"]
-
-        elif (verb == "west"):
-            config.the_player.next_loc = self.main_location.locations["Swamp"]
-            announce ("You have gotten to the Swamps")
-        elif (verb == "run"):
-            ''' moved to a random location in the area '''
+                    self.explored = True
+                config.the_player.go = True
+                    
+        else:
             
+            if (verb == "south"):
+                announce ("You return to your beach.")
+                config.the_player.next_loc = config.the_player.locations["beach"]
+                config.the_player.visiting = False
+            elif (verb == "north"):
+                announce ("Ocean north")
+                config.the_player.next_loc = self.main_location.locations["Wondering Woods"]
+            elif (verb == "east"):
+                announce ("You have enterd at the Oasis")
+                config.the_player.next_loc = self.main_location.locations["Oasis"]
+
+            elif (verb == "west"):
+                config.the_player.next_loc = self.main_location.locations["Swamp"]
+                announce ("You have gotten to the Swamps")
+        
+                
 class Oasis (location.SubLocation):
     def __init__ (self, m):
         super().__init__(m)
@@ -151,14 +160,14 @@ class Swamp (location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['explore'] = self
-        self.verbs['leave'] = self
+        self.verbs['back'] = self
         self.ship = None
         self.symbol = "^"
 
         self.event_chance = 50
 
     def enter (self):
-        announce ("You have arrived at the Swamps you can explore or leave")
+        announce ("You can explore or go back the swamps")
 
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "explore"):
@@ -166,6 +175,7 @@ class Swamp (location.SubLocation):
             config.the_player.kill_all_pirates("Drowned in the Swamp")
             print ("The pirates drowned in the Swamp")
 
-        elif (verb == "leave"):
+        elif (verb == "back"):
             sickness.Sickness().process(config.the_player.world)
-           
+            config.the_player.next_loc = self.main_location.locations["Wondering Woods"]
+            config.the_player.go = True
